@@ -17,7 +17,7 @@ public class RecValue extends Value {
 
     @Override
     public boolean equals(Object other) {
-        // TODO
+
         return false;
     }
 }

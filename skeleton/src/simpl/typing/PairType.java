@@ -16,20 +16,26 @@ public final class PairType extends Type {
 
     @Override
     public Substitution unify(Type t) throws TypeError {
-        // TODO
-        return null;
+        if(t instanceof TypeVar){
+            return t.unify(this);
+        }if(t instanceof PairType){
+            Substitution sub1 = t1.unify(((PairType) t).t1);
+            Substitution sub2 = t2.unify(((PairType) t).t2);
+            return sub2.compose(sub1);
+        }
+        throw new TypeError(t + " cannot be " + this);
     }
 
     @Override
     public boolean contains(TypeVar tv) {
-        // TODO
-        return false;
+        return t1.contains(tv) || t2.contains(tv);
     }
 
     @Override
     public Type replace(TypeVar a, Type t) {
-        // TODO
-        return null;
+        t1 = t1.replace(a,t);
+        t2 = t2.replace(a,t);
+        return this;
     }
 
     public String toString() {

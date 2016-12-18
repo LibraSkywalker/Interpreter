@@ -17,7 +17,12 @@ public class Mul extends ArithExpr {
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        IntValue value1 = (IntValue) l.eval(s);
+        IntValue value2 = (IntValue) r.eval(s);
+
+        if (Integer.MAX_VALUE / Math.abs(value1.n) < Math.abs(value2.n))
+            throw new RuntimeError("Integer Overflow");
+        int result = value1.n * value2.n;
+        return new IntValue(result);
     }
 }

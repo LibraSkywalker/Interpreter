@@ -13,7 +13,7 @@ final class BoolType extends Type {
     @Override
     public Substitution unify(Type t) throws TypeError {
         if (t instanceof TypeVar) {
-            return Substitution.of((TypeVar) t,this);
+            return t.unify(this);
         }
         else if (t instanceof BoolType){
             return Substitution.IDENTITY;

@@ -17,7 +17,17 @@ public class Sub extends ArithExpr {
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        IntValue value1 = (IntValue) l.eval(s);
+        IntValue value2 = (IntValue) r.eval(s);
+
+        if (value1.n < 0){
+            if (Integer.MIN_VALUE - value1.n > -value2.n)
+                throw new RuntimeError("Integer Overflow");
+        } else {
+            if (Integer.MAX_VALUE - value1.n < -value2.n)
+                throw new RuntimeError("Integer Overflow");
+        }
+        int result = value1.n - value2.n;
+        return new IntValue(result);
     }
 }

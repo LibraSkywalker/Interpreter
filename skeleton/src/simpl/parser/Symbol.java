@@ -29,4 +29,11 @@ public class Symbol {
         }
         return s;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Symbol){
+            return name.equals(((Symbol) obj).name);
+        } else return false;
+    }
 }

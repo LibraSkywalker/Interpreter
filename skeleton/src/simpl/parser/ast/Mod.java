@@ -17,7 +17,11 @@ public class Mod extends ArithExpr {
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        IntValue value1 = (IntValue) l.eval(s);
+        IntValue value2 = (IntValue) r.eval(s);
+
+        if (value2.n == 0) throw new RuntimeError("Attempt to divide 0");
+        int result = value1.n % value2.n;
+        return new IntValue(result);
     }
 }

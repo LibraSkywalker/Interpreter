@@ -1,9 +1,6 @@
 package simpl.parser.ast;
 
-import simpl.interpreter.BoolValue;
-import simpl.interpreter.RuntimeError;
-import simpl.interpreter.State;
-import simpl.interpreter.Value;
+import simpl.interpreter.*;
 import simpl.typing.Substitution;
 import simpl.typing.Type;
 import simpl.typing.TypeEnv;
@@ -22,13 +19,15 @@ public class Not extends UnaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult childResult = e.typecheck(E);
+        if ( childResult.t.equals(Type.BOOL)){
+            return TypeResult.of(childResult.s,Type.BOOL);
+        }
+        else throw new TypeError("There should be Bool after Not");
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        return new BoolValue(!((BoolValue)e.eval(s)).b);
     }
 }

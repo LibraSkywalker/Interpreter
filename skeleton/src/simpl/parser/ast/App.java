@@ -1,10 +1,6 @@
 package simpl.parser.ast;
 
-import simpl.interpreter.Env;
-import simpl.interpreter.FunValue;
-import simpl.interpreter.RuntimeError;
-import simpl.interpreter.State;
-import simpl.interpreter.Value;
+import simpl.interpreter.*;
 import simpl.parser.Symbol;
 import simpl.typing.ArrowType;
 import simpl.typing.Substitution;
@@ -26,13 +22,40 @@ public class App extends BinaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult leftResult = l.typecheck(E);
+        TypeResult rightResult = r.typecheck(E);
+        Type leftType = leftResult.t;
+        Type rightType = rightResult.t;
+        Substitution compoundSubstitution = leftResult.s.compose(rightResult.s);
+        leftType = compoundSubstitution.apply(leftType);
+        rightType = compoundSubstitution.apply(rightType);
+
+        Type thisType;
+        Substitution newSubstitution;
+        if (leftType instanceof ArrowType){
+            newSubstitution = ((ArrowType) leftType).t1.unify(rightType);
+            newSubstitution.compose(compoundSubstitution);
+            thisType = ((ArrowType) leftType).t2;
+        } else if (leftType instanceof TypeVar){
+            TypeVar typeVar = new TypeVar(false);
+            newSubstitution = leftType.unify(new ArrowType(rightType,typeVar));
+            newSubstitution.compose(compoundSubstitution);
+            thisType = compoundSubstitution.apply(typeVar);
+        } else {
+            throw new TypeError("left expression isn't a function, application failed.");
+        }
+        return TypeResult.of(compoundSubstitution,thisType);
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        FunValue funValue = (FunValue) l.eval(s);
+        State newState = s;
+        //if (funValue.e..get(funValue.x) != null){ //pseudo Lazy evaluation
+            Value parameter = r.eval(s);
+            newState = State.of(new Env(funValue.E, funValue.x, parameter), s.M, s.p);
+       // }
+        return funValue.e.eval(newState);
+
     }
 }

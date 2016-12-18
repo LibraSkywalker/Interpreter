@@ -15,7 +15,21 @@ import simpl.typing.TypeResult;
 public class succ extends FunValue {
 
     public succ() {
-        // TODO
-        super(null, null, null);
+        //TODO
+        super(Env.empty,Symbol.symbol("x"),new Expr(){
+
+            @Override
+            public TypeResult typecheck(TypeEnv E) throws TypeError {
+                return null;
+            }
+
+            @Override
+            public Value eval(State s) throws RuntimeError {
+                IntValue intValue = (IntValue)(s.E.get(Symbol.symbol("x")));
+                int now = intValue.n + 1;
+                return new IntValue(now);
+            }
+
+        });
     }
 }

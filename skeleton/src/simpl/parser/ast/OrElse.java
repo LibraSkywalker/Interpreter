@@ -22,13 +22,20 @@ public class OrElse extends BinaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult leftResult = l.typecheck(E);
+        TypeResult rightResult = r.typecheck(E);
+        if (leftResult.t.equals(Type.BOOL) && rightResult.t.equals(Type.BOOL)){
+            Substitution leftSubstitution = leftResult.s;
+            Substitution rightSubstitution = rightResult.s;
+            return TypeResult.of(leftSubstitution.compose(rightSubstitution),Type.BOOL);
+        }
+        else throw new TypeError("There should be two Bool for orElse");
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        if (l.eval(s).equals(new BoolValue(false)))
+            return r.eval(s);
+        return new BoolValue(true);
     }
 }

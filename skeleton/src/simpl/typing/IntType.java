@@ -13,7 +13,7 @@ final class IntType extends Type {
     @Override
     public Substitution unify(Type t) throws TypeError {
         if (t instanceof TypeVar) {
-            return Substitution.of((TypeVar) t,this);
+            return t.unify(this);
         }
         else if (t instanceof IntType){
             return Substitution.IDENTITY;

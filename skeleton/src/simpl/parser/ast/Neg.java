@@ -22,13 +22,15 @@ public class Neg extends UnaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult childResult = e.typecheck(E);
+        if ( childResult.t.equals(Type.INT)){
+            return TypeResult.of(childResult.s,Type.INT);
+        }
+        else throw new TypeError("There should be Int after Neg");
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        return new IntValue(-((IntValue)e.eval(s)).n);
     }
 }
