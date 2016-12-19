@@ -40,7 +40,9 @@ public class Interpreter {
     }
 
     public static void main(String[] args) {
+        //System.out.println(System.getProperty("user.dir"));
         interpret("doc/examples/plus.spl");
+       /*
         interpret("doc/examples/factorial.spl");
         interpret("doc/examples/gcd1.spl");
         interpret("doc/examples/gcd2.spl");
@@ -52,7 +54,8 @@ public class Interpreter {
         interpret("doc/examples/pcf.minus.spl");
         interpret("doc/examples/pcf.factorial.spl");
         interpret("doc/examples/pcf.fibonacci.spl");
-        // interpret("doc/examples/pcf.twice.spl");
-        // interpret("doc/examples/pcf.lists.spl");
+        interpret("doc/examples/pcf.twice.spl");
+        interpret("doc/examples/pcf.lists.spl");
+        */
     }
 }

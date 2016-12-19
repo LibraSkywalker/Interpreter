@@ -21,13 +21,16 @@ public class Ref extends UnaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult typeResult = e.typecheck(E);
+        return TypeResult.of(typeResult.s, new RefType(typeResult.s.apply(typeResult.t)));
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        int pointer = s.p.get();
+        s.p.set(pointer + 1);
+        Value value = e.eval(s);
+        s.M.put(pointer, value);
+        return new RefValue(pointer);
     }
 }

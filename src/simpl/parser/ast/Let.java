@@ -5,6 +5,7 @@ import simpl.interpreter.RuntimeError;
 import simpl.interpreter.State;
 import simpl.interpreter.Value;
 import simpl.parser.Symbol;
+import simpl.typing.Substitution;
 import simpl.typing.TypeEnv;
 import simpl.typing.TypeError;
 import simpl.typing.TypeResult;
@@ -26,13 +27,16 @@ public class Let extends Expr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult typeResult1 = e1.typecheck(E);
+        TypeResult typeResult2 = e2.typecheck(typeResult1.s.compose(TypeEnv.of(E, x, typeResult1.t)));
+        Substitution compoundSubstitution = typeResult2.s.compose(typeResult1.s);
+        return TypeResult.of(compoundSubstitution, compoundSubstitution.apply(typeResult2.t));
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        Value value1 = e1.eval(s);
+        Env env = new Env(s.E, x, value1);
+        return e2.eval(State.of(env, s.M, s.p));
     }
 }
