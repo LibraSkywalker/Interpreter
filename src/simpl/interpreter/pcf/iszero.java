@@ -16,7 +16,6 @@ import simpl.typing.TypeResult;
 public class iszero extends FunValue {
 
     public iszero() {
-        //TODO
         super(Env.empty,Symbol.symbol("x"),new Expr(){
 
             @Override

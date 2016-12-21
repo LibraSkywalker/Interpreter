@@ -1,6 +1,7 @@
 package simpl.parser.ast;
 
 import simpl.interpreter.*;
+import simpl.interpreter.lib.fst;
 import simpl.parser.Symbol;
 import simpl.typing.ArrowType;
 import simpl.typing.Substitution;

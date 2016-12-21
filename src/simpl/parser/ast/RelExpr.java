@@ -31,6 +31,6 @@ public abstract class RelExpr extends BinaryExpr {
         compoundSubstitution.apply(leftType);
         compoundSubstitution.apply(rightType);
 
-        return TypeResult.of(compoundSubstitution,Type.INT);
+        return TypeResult.of(compoundSubstitution,Type.BOOL);
     }
 }

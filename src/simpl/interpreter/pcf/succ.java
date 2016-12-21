@@ -15,7 +15,6 @@ import simpl.typing.TypeResult;
 public class succ extends FunValue {
 
     public succ() {
-        //TODO
         super(Env.empty,Symbol.symbol("x"),new Expr(){
 
             @Override

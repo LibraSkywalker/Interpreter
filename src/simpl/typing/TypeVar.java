@@ -22,6 +22,7 @@ public class TypeVar extends Type {
     @Override
     public Substitution unify(Type t) throws TypeCircularityError {
         if (t.contains(this)){
+            if (t instanceof TypeVar) return Substitution.IDENTITY;
             throw new TypeCircularityError();
         }
         return Substitution.of(this,t);

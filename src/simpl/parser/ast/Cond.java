@@ -49,7 +49,7 @@ public class Cond extends Expr {
 
         compoundSubstitution = type3.unify(resultType).compose(compoundSubstitution);
 
-        compoundSubstitution.apply(resultType);
+        resultType = compoundSubstitution.apply(resultType);
 
         return TypeResult.of(compoundSubstitution,resultType);
     }
