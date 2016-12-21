@@ -6,12 +6,7 @@ import simpl.interpreter.RuntimeError;
 import simpl.interpreter.State;
 import simpl.interpreter.Value;
 import simpl.parser.Symbol;
-import simpl.typing.Substitution;
-import simpl.typing.Type;
-import simpl.typing.TypeEnv;
-import simpl.typing.TypeError;
-import simpl.typing.TypeResult;
-import simpl.typing.TypeVar;
+import simpl.typing.*;
 
 public class Rec extends Expr {
 
@@ -29,10 +24,14 @@ public class Rec extends Expr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        TypeVar typeVar = new TypeVar(true);
+        TypeVar typeVar = new TypeVar(false);
         TypeResult typeResult = e.typecheck(TypeEnv.of(E, x, typeVar));
-        Substitution compoundSubstitution = typeResult.s.compose(typeResult.t.unify(typeResult.s.apply(typeVar)));
-        return TypeResult.of(typeResult.s, compoundSubstitution.apply(typeResult.t));
+        Type returnType = typeResult.t;
+        Type parameterType = typeResult.s.apply(typeVar);
+
+        Substitution compoundSustitution = typeResult.s.compose(returnType.unify(parameterType));
+        returnType = compoundSustitution.apply(returnType);
+        return TypeResult.of(compoundSustitution, returnType);
     }
 
     @Override

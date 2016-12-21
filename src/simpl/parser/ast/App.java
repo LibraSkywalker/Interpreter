@@ -22,29 +22,28 @@ public class App extends BinaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
+
         TypeResult leftResult = l.typecheck(E);
         TypeResult rightResult = r.typecheck(E);
-        Type leftType = leftResult.t;
-        Type rightType = rightResult.t;
-        Substitution compoundSubstitution = leftResult.s.compose(rightResult.s);
-        leftType = compoundSubstitution.apply(leftType);
-        rightType = compoundSubstitution.apply(rightType);
 
-        Type thisType;
-        Substitution newSubstitution;
-        if (leftType instanceof ArrowType){
-            newSubstitution = ((ArrowType) leftType).t1.unify(rightType);
-            newSubstitution.compose(compoundSubstitution);
-            thisType = ((ArrowType) leftType).t2;
-        } else if (leftType instanceof TypeVar){
-            TypeVar typeVar = new TypeVar(false);
-            newSubstitution = leftType.unify(new ArrowType(rightType,typeVar));
-            newSubstitution.compose(compoundSubstitution);
-            thisType = compoundSubstitution.apply(typeVar);
-        } else {
-            throw new TypeError("left expression isn't a function, application failed.");
-        }
-        return TypeResult.of(compoundSubstitution,thisType);
+        Type returnType = null;
+
+        Substitution compoundSubstitution = leftResult.s.compose(rightResult.s);
+
+        Type FunctionType = compoundSubstitution.apply(leftResult.t);
+        Type parameterType = compoundSubstitution.apply(rightResult.t);
+
+        if (FunctionType instanceof ArrowType){
+            compoundSubstitution = ((ArrowType) FunctionType).t1.unify(parameterType);
+            FunctionType = compoundSubstitution.apply(FunctionType);
+            returnType = ((ArrowType) FunctionType).t2;
+        } else if (FunctionType instanceof TypeVar){
+            returnType = new TypeVar(false);
+            compoundSubstitution = FunctionType.unify(new ArrowType(parameterType,returnType)).compose(compoundSubstitution);
+            returnType = compoundSubstitution.apply(returnType);
+        } else throw new TypeError("The left side is not a function");
+
+        return TypeResult.of(compoundSubstitution, returnType);
     }
 
     @Override

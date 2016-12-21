@@ -39,6 +39,6 @@ public class TypeVar extends Type {
     @Override
     public Type replace(TypeVar a, Type t) {
         if (name.equals(a.name)) return t;
-        return null;
+        return this;
     }
 }

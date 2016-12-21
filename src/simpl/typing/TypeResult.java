@@ -17,4 +17,9 @@ public class TypeResult {
     public static TypeResult of(Substitution s, Type t) {
         return new TypeResult(s, t);
     }
+
+    @Override
+    public String toString() {
+        return s.toString() + t.toString();
+    }
 }

@@ -28,7 +28,7 @@ public class Fn extends Expr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        Type parameterType = new TypeVar(true);
+        Type parameterType = new TypeVar(false);
         TypeResult typeResult = e.typecheck(TypeEnv.of(E,x,parameterType));
         parameterType = typeResult.s.apply(parameterType);
         Type resultType = typeResult.s.apply(typeResult.t);

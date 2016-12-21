@@ -18,11 +18,20 @@ public abstract class ArithExpr extends BinaryExpr {
         TypeResult rightResult = r.typecheck(E);
         Type leftType = leftResult.t;
         Type rightType = rightResult.t;
-        if (leftType.equals(Type.INT) && rightType.equals(Type.INT)){
-            Substitution leftSubstitution = leftResult.s;
-            Substitution rightSubstitution = rightResult.s;
-            return TypeResult.of(leftSubstitution.compose(rightSubstitution),Type.INT);
-        }
-        else throw new TypeError("There should be two Int for ArithExpr");
+
+        Substitution compoundSubstitution = leftResult.s.compose(rightResult.s);
+        compoundSubstitution.apply(leftType);
+        compoundSubstitution.apply(rightType);
+
+        Substitution sub1 = leftType.unify(Type.INT);
+        Substitution sub2 = rightType.unify(Type.INT);
+
+        compoundSubstitution = sub1.compose(sub2.compose(compoundSubstitution));
+
+        compoundSubstitution.apply(leftType);
+        compoundSubstitution.apply(rightType);
+
+        return TypeResult.of(compoundSubstitution,Type.INT);
+
     }
 }

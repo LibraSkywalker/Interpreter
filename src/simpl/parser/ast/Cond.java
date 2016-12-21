@@ -41,17 +41,17 @@ public class Cond extends Expr {
         type2 = compoundSubstitution.apply(type2);
         type3 = compoundSubstitution.apply(type3);
 
-        Type thisType = new TypeVar(false);
+        Type resultType = new TypeVar(false);
 
-        compoundSubstitution = type2.unify(thisType);
+        compoundSubstitution = type2.unify(resultType).compose(compoundSubstitution);
 
         type3 = compoundSubstitution.apply(type3);
 
-        compoundSubstitution = type3.unify(thisType);
+        compoundSubstitution = type3.unify(resultType).compose(compoundSubstitution);
 
-        type2 = compoundSubstitution.apply(type2);
+        compoundSubstitution.apply(resultType);
 
-        return TypeResult.of(compoundSubstitution,thisType);
+        return TypeResult.of(compoundSubstitution,resultType);
     }
 
     @Override
